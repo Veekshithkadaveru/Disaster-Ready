@@ -19,7 +19,7 @@ interface BookmarkDao {
     fun getAllBookmarks(): Flow<List<BookmarkEntity>>
 
     @Query("SELECT tipId FROM bookmarks")
-    fun getBookmarkedIds(): Flow<Set<Int>>
+    fun getBookmarkedIds(): Flow<List<Int>>
 
     @Query("SELECT EXISTS(SELECT 1 FROM bookmarks WHERE tipId = :tipId)")
     fun isBookmarked(tipId: Int): Flow<Boolean>

@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,6 +24,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import app.krafted.disasterready.ui.HomeScreen
 import app.krafted.disasterready.ui.theme.DisasterReadyTheme
 
 class MainActivity : ComponentActivity() {
@@ -80,15 +82,30 @@ fun DisasterReadyApp() {
         }
     ) {
         composable(Routes.SPLASH) {
-            PlaceholderScreen("Splash") {
+            LaunchedEffect(Unit) {
                 navController.navigate(Routes.HOME) {
                     popUpTo(Routes.SPLASH) { inclusive = true }
                 }
             }
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color(0xFF0A0D14))
+            )
         }
 
         composable(Routes.HOME) {
-            PlaceholderScreen("Home — Chapter List") {}
+            HomeScreen(
+                onChapterClick = { chapterId ->
+                    navController.navigate(Routes.chapter(chapterId))
+                },
+                onSearchClick = {
+                    navController.navigate(Routes.SEARCH)
+                },
+                onBookmarksClick = {
+                    navController.navigate(Routes.BOOKMARKS)
+                }
+            )
         }
 
         composable(

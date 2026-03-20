@@ -12,14 +12,14 @@ private data class Guide(
 
 class GuideRepository(context: Context) {
 
-    private val chapters: List<Chapter> by lazy {
+    private val _chapters: List<Chapter> by lazy {
         val json = context.assets.open("guide.json").bufferedReader().use { it.readText() }
         Gson().fromJson(json, Guide::class.java).chapters
     }
 
-    fun getChapters(): List<Chapter> = chapters
+    fun getChapters(): List<Chapter> = _chapters
 
-    fun getChapter(id: String): Chapter? = chapters.find { it.id == id }
+    fun getChapter(id: String): Chapter? = _chapters.find { it.id == id }
 
-    fun getAllTips(): List<Tip> = chapters.flatMap { it.tips }
+    fun getAllTips(): List<Tip> = _chapters.flatMap { it.tips }
 }

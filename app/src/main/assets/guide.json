@@ -1,11 +1,37 @@
 {
   "chapters": [
     {
+      "id": "volcano",
+      "title": "Volcanic Eruption",
+      "subtitle": "Ash fall, lava flows, pyroclastic flows",
+      "icon": "ic_volcano",
+      "background": "bg_volcano",
+      "accentColor": "#D84315",
+      "quickFact": "Volcanic ash is not soft — it is fine shards of rock and glass that can collapse roofs, contaminate water, and cause lung damage.",
+      "tips": [
+        { "id": 701, "phase": "BEFORE", "severity": "CRITICAL", "title": "Know Your Volcano Alert Levels", "body": "USGS uses a four-level alert system (Normal, Advisory, Watch, Warning). Know what each level means and what actions to take for your volcano." },
+        { "id": 702, "phase": "BEFORE", "severity": "HIGH", "title": "Prepare for Ash Fall", "body": "Store N95 respirators, safety goggles, and extra air filters. Ash fall can affect areas hundreds of miles from the eruption." },
+        { "id": 703, "phase": "BEFORE", "severity": "HIGH", "title": "Know Lahar and Flow Hazard Zones", "body": "Lava flows and lahars (volcanic mudflows) follow valleys and river channels. Know if your home is in a mapped flow zone." },
+        { "id": 704, "phase": "BEFORE", "severity": "MEDIUM", "title": "Stock Supplies for Shelter-in-Place", "body": "Volcanic events can last days to months. Maintain a 2-week supply of food, water, medications, and essential items." },
+        { "id": 705, "phase": "BEFORE", "severity": "MEDIUM", "title": "Protect Mechanical Equipment", "body": "Volcanic ash clogs engines, HVAC systems, and electronics. Cover or store outdoor equipment and spare air filters for vehicles." },
+        { "id": 706, "phase": "DURING", "severity": "CRITICAL", "title": "Evacuate Lava Flow Zones Immediately", "body": "Lava flows and pyroclastic flows cannot be outrun on foot. Evacuate immediately when instructed. Do not return to retrieve belongings." },
+        { "id": 707, "phase": "DURING", "severity": "CRITICAL", "title": "Shelter from Ash Fall", "body": "Go indoors, close all windows, doors, and dampers, and turn off HVAC systems. Seal gaps with wet towels to reduce ash intrusion." },
+        { "id": 708, "phase": "DURING", "severity": "HIGH", "title": "Wear Respiratory and Eye Protection", "body": "If you must go outside during ash fall, wear an N95 mask and goggles. Volcanic ash damages eyes and lungs rapidly." },
+        { "id": 709, "phase": "DURING", "severity": "HIGH", "title": "Clear Ash from Rooftops", "body": "Volcanic ash is extremely heavy when wet. Clear it from flat roofs frequently to prevent collapse." },
+        { "id": 710, "phase": "DURING", "severity": "MEDIUM", "title": "Avoid River Valleys During Heavy Rain", "body": "Lahars can travel rapidly down river valleys during or after eruptions. Do not shelter in low-lying river areas." },
+        { "id": 711, "phase": "AFTER", "severity": "CRITICAL", "title": "Return Only When Declared Safe", "body": "Volcanic hazards persist long after the initial eruption. Return only after USGS and local authorities confirm it is safe." },
+        { "id": 712, "phase": "AFTER", "severity": "CRITICAL", "title": "Do Not Drink Tap Water Without Testing", "body": "Ash can contaminate water supplies with fluoride and other chemicals. Do not drink tap water until authorities confirm it is safe." },
+        { "id": 713, "phase": "AFTER", "severity": "HIGH", "title": "Clean Ash Carefully", "body": "Dampen ash before sweeping to prevent re-suspension. Never use a dry broom — this drives toxic particles into the air." },
+        { "id": 714, "phase": "AFTER", "severity": "HIGH", "title": "Protect Your Lungs During Cleanup", "body": "Continue wearing an N95 respirator during all ash cleanup. Silica particles in ash cause long-term lung disease with prolonged exposure." },
+        { "id": 715, "phase": "AFTER", "severity": "MEDIUM", "title": "Monitor Structural Integrity", "body": "Ash-loaded structures and those near lava flows may have hidden damage. Have your home professionally inspected before full re-occupancy." }
+      ]
+    },
+    {
       "id": "earthquake",
       "title": "Earthquake",
       "subtitle": "Ground shaking, structural collapse",
-      "icon": "vol_sym_1",
-      "background": "back_1",
+      "icon": "ic_earthquake",
+      "background": "bg_earthquake",
       "accentColor": "#E53935",
       "quickFact": "Most earthquake injuries occur from falling objects and debris — not the shaking itself.",
       "tips": [
@@ -30,8 +56,8 @@
       "id": "hurricane",
       "title": "Hurricane",
       "subtitle": "Storm surge, wind, flooding",
-      "icon": "vol_sym_2",
-      "background": "back_2",
+      "icon": "ic_hurricane",
+      "background": "bg_hurricane",
       "accentColor": "#1E88E5",
       "quickFact": "Storm surge — not wind — is the deadliest aspect of a hurricane, capable of pushing 20+ feet of water inland.",
       "tips": [
@@ -56,8 +82,8 @@
       "id": "wildfire",
       "title": "Wildfire",
       "subtitle": "Fast-moving flames, toxic smoke",
-      "icon": "vol_sym_3",
-      "background": "back_3",
+      "icon": "ic_wildfire",
+      "background": "bg_wildfire",
       "accentColor": "#FB8C00",
       "quickFact": "Wildfires can travel at up to 14 miles per hour and change direction within seconds in shifting winds.",
       "tips": [
@@ -82,8 +108,8 @@
       "id": "flood",
       "title": "Flood",
       "subtitle": "Rising water, contamination, currents",
-      "icon": "vol_sym_4",
-      "background": "back_4",
+      "icon": "ic_flood",
+      "background": "bg_flood",
       "accentColor": "#00ACC1",
       "quickFact": "Floods are the most common and costly natural disaster in the US — just 1 inch of water can cause $25,000 in damage.",
       "tips": [
@@ -108,8 +134,8 @@
       "id": "tornado",
       "title": "Tornado",
       "subtitle": "Violent winds, sudden destruction",
-      "icon": "vol_sym_5",
-      "background": "back_5",
+      "icon": "ic_tornado",
+      "background": "bg_tornado",
       "accentColor": "#6D4C41",
       "quickFact": "A tornado can change direction in an instant and travel at speeds of 300+ mph — giving you as little as 13 minutes of warning.",
       "tips": [
@@ -134,8 +160,8 @@
       "id": "tsunami",
       "title": "Tsunami",
       "subtitle": "Ocean waves, coastal flooding",
-      "icon": "vol_sym_6",
-      "background": "back_1",
+      "icon": "ic_tsunami",
+      "background": "bg_tsunami",
       "accentColor": "#00695C",
       "quickFact": "A tsunami can travel across an ocean at 500 mph and arrive as a series of waves for several hours after the first.",
       "tips": [
@@ -154,32 +180,6 @@
         { "id": 613, "phase": "AFTER", "severity": "HIGH", "title": "Document Damage Before Cleanup", "body": "Photograph all damage for insurance purposes before moving or discarding debris. Contact your insurer and FEMA to begin assistance." },
         { "id": 614, "phase": "AFTER", "severity": "HIGH", "title": "Check Water and Food Safety", "body": "Municipal water supplies may be compromised. Use bottled or boiled water until authorities confirm tap water is safe." },
         { "id": 615, "phase": "AFTER", "severity": "MEDIUM", "title": "Watch for Aftershocks", "body": "If the tsunami was triggered by an earthquake, aftershocks will follow and could generate additional tsunami waves. Stay vigilant." }
-      ]
-    },
-    {
-      "id": "volcano",
-      "title": "Volcanic Eruption",
-      "subtitle": "Ash fall, lava flows, pyroclastic flows",
-      "icon": "vol_sym_7",
-      "background": "back_2",
-      "accentColor": "#D84315",
-      "quickFact": "Volcanic ash is not soft — it is fine shards of rock and glass that can collapse roofs, contaminate water, and cause lung damage.",
-      "tips": [
-        { "id": 701, "phase": "BEFORE", "severity": "CRITICAL", "title": "Know Your Volcano Alert Levels", "body": "USGS uses a four-level alert system (Normal, Advisory, Watch, Warning). Know what each level means and what actions to take for your volcano." },
-        { "id": 702, "phase": "BEFORE", "severity": "HIGH", "title": "Prepare for Ash Fall", "body": "Store N95 respirators, safety goggles, and extra air filters. Ash fall can affect areas hundreds of miles from the eruption." },
-        { "id": 703, "phase": "BEFORE", "severity": "HIGH", "title": "Know Lahar and Flow Hazard Zones", "body": "Lava flows and lahars (volcanic mudflows) follow valleys and river channels. Know if your home is in a mapped flow zone." },
-        { "id": 704, "phase": "BEFORE", "severity": "MEDIUM", "title": "Stock Supplies for Shelter-in-Place", "body": "Volcanic events can last days to months. Maintain a 2-week supply of food, water, medications, and essential items." },
-        { "id": 705, "phase": "BEFORE", "severity": "MEDIUM", "title": "Protect Mechanical Equipment", "body": "Volcanic ash clogs engines, HVAC systems, and electronics. Cover or store outdoor equipment and spare air filters for vehicles." },
-        { "id": 706, "phase": "DURING", "severity": "CRITICAL", "title": "Evacuate Lava Flow Zones Immediately", "body": "Lava flows and pyroclastic flows cannot be outrun on foot. Evacuate immediately when instructed. Do not return to retrieve belongings." },
-        { "id": 707, "phase": "DURING", "severity": "CRITICAL", "title": "Shelter from Ash Fall", "body": "Go indoors, close all windows, doors, and dampers, and turn off HVAC systems. Seal gaps with wet towels to reduce ash intrusion." },
-        { "id": 708, "phase": "DURING", "severity": "HIGH", "title": "Wear Respiratory and Eye Protection", "body": "If you must go outside during ash fall, wear an N95 mask and goggles. Volcanic ash damages eyes and lungs rapidly." },
-        { "id": 709, "phase": "DURING", "severity": "HIGH", "title": "Clear Ash from Rooftops", "body": "Volcanic ash is extremely heavy when wet. Clear it from flat roofs frequently to prevent collapse." },
-        { "id": 710, "phase": "DURING", "severity": "MEDIUM", "title": "Avoid River Valleys During Heavy Rain", "body": "Lahars can travel rapidly down river valleys during or after eruptions. Do not shelter in low-lying river areas." },
-        { "id": 711, "phase": "AFTER", "severity": "CRITICAL", "title": "Return Only When Declared Safe", "body": "Volcanic hazards persist long after the initial eruption. Return only after USGS and local authorities confirm it is safe." },
-        { "id": 712, "phase": "AFTER", "severity": "CRITICAL", "title": "Do Not Drink Tap Water Without Testing", "body": "Ash can contaminate water supplies with fluoride and other chemicals. Do not drink tap water until authorities confirm it is safe." },
-        { "id": 713, "phase": "AFTER", "severity": "HIGH", "title": "Clean Ash Carefully", "body": "Dampen ash before sweeping to prevent re-suspension. Never use a dry broom — this drives toxic particles into the air." },
-        { "id": 714, "phase": "AFTER", "severity": "HIGH", "title": "Protect Your Lungs During Cleanup", "body": "Continue wearing an N95 respirator during all ash cleanup. Silica particles in ash cause long-term lung disease with prolonged exposure." },
-        { "id": 715, "phase": "AFTER", "severity": "MEDIUM", "title": "Monitor Structural Integrity", "body": "Ash-loaded structures and those near lava flows may have hidden damage. Have your home professionally inspected before full re-occupancy." }
       ]
     }
   ]
