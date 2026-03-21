@@ -24,6 +24,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import app.krafted.disasterready.ui.BookmarksScreen
 import app.krafted.disasterready.ui.ChapterScreen
 import app.krafted.disasterready.ui.HomeScreen
 import app.krafted.disasterready.ui.theme.DisasterReadyTheme
@@ -121,17 +122,19 @@ fun DisasterReadyApp() {
         }
 
         composable(Routes.BOOKMARKS) {
-            PlaceholderScreen("Bookmarks") {}
+            BookmarksScreen(
+                onBackClick = { navController.popBackStack() }
+            )
         }
 
         composable(Routes.SEARCH) {
-            PlaceholderScreen("Search") {}
+            PlaceholderScreen("Search")
         }
     }
 }
 
 @Composable
-private fun PlaceholderScreen(label: String, onAuto: () -> Unit = {}) {
+private fun PlaceholderScreen(label: String) {
     Box(
         modifier = Modifier
             .fillMaxSize()

@@ -1,5 +1,6 @@
 package app.krafted.disasterready.ui.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -34,6 +35,9 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -49,15 +53,23 @@ fun TipCard(
     accent: Color,
     isBookmarked: Boolean,
     onBookmarkToggle: () -> Unit,
-    index: Int
+    index: Int,
+    disasterLabel: String? = null,
+    disasterIcon: String? = null
 ) {
     val sevColor = severityColor(tip.severity)
+    val context = LocalContext.current
+    val iconResId = remember(disasterIcon) {
+        if (disasterIcon != null)
+            context.resources.getIdentifier(disasterIcon, "drawable", context.packageName)
+        else 0
+    }
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 5.dp)
-            .clip(RoundedCornerShape(16.dp))
+            .padding(horizontal = 16.dp, vertical = 4.dp)
+            .clip(RoundedCornerShape(13.dp))
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(bounded = true, color = accent.copy(alpha = 0.2f)),
@@ -70,9 +82,8 @@ fun TipCard(
                 .drawBehind {
                     drawRoundRect(
                         color = Color(0xFF111620),
-                        cornerRadius = CornerRadius(16.dp.toPx())
+                        cornerRadius = CornerRadius(13.dp.toPx())
                     )
-
                     drawRoundRect(
                         brush = Brush.horizontalGradient(
                             colors = listOf(
@@ -82,9 +93,8 @@ fun TipCard(
                             startX = 0f,
                             endX = size.width * 0.4f
                         ),
-                        cornerRadius = CornerRadius(16.dp.toPx())
+                        cornerRadius = CornerRadius(13.dp.toPx())
                     )
-
                     drawRoundRect(
                         brush = Brush.verticalGradient(
                             colors = listOf(
@@ -94,12 +104,11 @@ fun TipCard(
                             startY = 0f,
                             endY = size.height * 0.3f
                         ),
-                        cornerRadius = CornerRadius(16.dp.toPx())
+                        cornerRadius = CornerRadius(13.dp.toPx())
                     )
-
                     drawRoundRect(
                         color = DarkBorder.copy(alpha = 0.6f),
-                        cornerRadius = CornerRadius(16.dp.toPx()),
+                        cornerRadius = CornerRadius(13.dp.toPx()),
                         style = Stroke(width = 0.5.dp.toPx())
                     )
                 }
@@ -114,7 +123,7 @@ fun TipCard(
                 modifier = Modifier
                     .width(4.dp)
                     .fillMaxHeight()
-                    .padding(vertical = 12.dp)
+                    .padding(vertical = 10.dp)
                     .clip(RoundedCornerShape(2.dp))
                     .background(sevColor)
             )
@@ -122,8 +131,60 @@ fun TipCard(
             Column(
                 modifier = Modifier
                     .weight(1f)
-                    .padding(start = 16.dp, end = 8.dp, top = 16.dp, bottom = 16.dp)
+                    .padding(start = 13.dp, end = 6.dp, top = 11.dp, bottom = 13.dp)
             ) {
+                // Disaster type header (only shown when label is provided)
+                if (disasterLabel != null) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        if (iconResId != 0) {
+                            Box(
+                                modifier = Modifier
+                                    .size(22.dp)
+                                    .drawBehind {
+                                        drawCircle(
+                                            brush = Brush.radialGradient(
+                                                colors = listOf(
+                                                    accent.copy(alpha = 0.15f),
+                                                    Color.Transparent
+                                                )
+                                            ),
+                                            radius = size.minDimension / 2
+                                        )
+                                    },
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Image(
+                                    painter = painterResource(id = iconResId),
+                                    contentDescription = disasterLabel,
+                                    modifier = Modifier.size(16.dp),
+                                    contentScale = ContentScale.Fit
+                                )
+                            }
+                        }
+                        Text(
+                            text = disasterLabel,
+                            style = MaterialTheme.typography.labelSmall.copy(
+                                fontWeight = FontWeight.Bold,
+                                letterSpacing = 0.3.sp,
+                                fontSize = 10.sp
+                            ),
+                            color = accent
+                        )
+                    }
+
+                    // Separator
+                    Box(
+                        modifier = Modifier
+                            .padding(top = 8.dp, bottom = 10.dp, end = 6.dp)
+                            .fillMaxWidth()
+                            .height(0.5.dp)
+                            .background(Color.White.copy(alpha = 0.07f))
+                    )
+                }
+
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -133,7 +194,7 @@ fun TipCard(
 
                     Box(
                         modifier = Modifier
-                            .size(36.dp)
+                            .size(29.dp)
                             .clip(CircleShape)
                             .background(
                                 if (isBookmarked) accent.copy(alpha = 0.12f)
@@ -141,7 +202,7 @@ fun TipCard(
                             )
                             .clickable(
                                 interactionSource = remember { MutableInteractionSource() },
-                                indication = ripple(bounded = true, radius = 18.dp),
+                                indication = ripple(bounded = true, radius = 14.dp),
                                 onClick = onBookmarkToggle
                             ),
                         contentAlignment = Alignment.Center
@@ -152,12 +213,12 @@ fun TipCard(
                             contentDescription = if (isBookmarked) "Remove bookmark"
                             else "Add bookmark",
                             tint = if (isBookmarked) accent else TextTertiary,
-                            modifier = Modifier.size(18.dp)
+                            modifier = Modifier.size(14.dp)
                         )
                     }
                 }
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(10.dp))
 
                 Text(
                     text = tip.title,
@@ -168,7 +229,7 @@ fun TipCard(
                     color = TextPrimary
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(6.dp))
 
                 Text(
                     text = tip.body,

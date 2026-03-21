@@ -44,8 +44,11 @@ class ChapterViewModel(application: Application) : AndroidViewModel(application)
     fun loadChapter(chapterId: String) {
         if (_chapterId.value == chapterId) return
         _chapterId.value = chapterId
-        _chapter = repository.getChapter(chapterId)
-        _chapterState.value = _chapter
+        viewModelScope.launch {
+            repository.loadChapters()
+            _chapter = repository.getChapter(chapterId)
+            _chapterState.value = _chapter
+        }
     }
 
     fun setActivePhase(phase: Phase) {
