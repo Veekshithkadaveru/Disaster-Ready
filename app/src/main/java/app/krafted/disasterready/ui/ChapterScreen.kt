@@ -5,6 +5,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,6 +25,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -35,7 +38,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -67,16 +72,18 @@ import app.krafted.disasterready.viewmodel.ChapterViewModel
 fun ChapterScreen(
     chapterId: String,
     onBackClick: () -> Unit,
+    highlightTipId: Int? = null,
     viewModel: ChapterViewModel = viewModel()
 ) {
-    LaunchedEffect(chapterId) {
-        viewModel.loadChapter(chapterId)
+    LaunchedEffect(chapterId, highlightTipId) {
+        viewModel.loadChapter(chapterId, highlightTipId)
     }
 
     val chapter by viewModel.chapter.collectAsState()
     val activePhase by viewModel.activePhase.collectAsState()
     val filteredTips by viewModel.filteredTips.collectAsState()
     val bookmarkedIds by viewModel.bookmarkedTipIds.collectAsState()
+    val currentHighlightId by viewModel.highlightTipId.collectAsState()
 
     val chapterData = chapter ?: return
 
@@ -142,7 +149,19 @@ fun ChapterScreen(
                 )
         )
 
+        val listState = rememberLazyListState()
+
+        LaunchedEffect(currentHighlightId, filteredTips) {
+            if (currentHighlightId != null && filteredTips.isNotEmpty()) {
+                val tipIndex = filteredTips.indexOfFirst { it.id == currentHighlightId }
+                if (tipIndex >= 0) {
+                    listState.animateScrollToItem(tipIndex + 4)
+                }
+            }
+        }
+
         LazyColumn(
+            state = listState,
             contentPadding = PaddingValues(bottom = 40.dp),
             modifier = Modifier.navigationBarsPadding()
         ) {
@@ -178,13 +197,41 @@ fun ChapterScreen(
             }
 
             itemsIndexed(filteredTips) { index, tip ->
-                TipCard(
-                    tip = tip,
-                    accent = accent,
-                    isBookmarked = bookmarkedIds.contains(tip.id),
-                    onBookmarkToggle = { viewModel.toggleBookmark(tip) },
-                    index = index
+                val isHighlighted = tip.id == currentHighlightId
+                var highlightShown by remember(tip.id) { mutableStateOf(isHighlighted) }
+
+                if (isHighlighted) {
+                    LaunchedEffect(Unit) {
+                        kotlinx.coroutines.delay(2500)
+                        highlightShown = false
+                        viewModel.clearHighlight()
+                    }
+                }
+
+                val highlightAlpha by animateFloatAsState(
+                    targetValue = if (highlightShown) 1f else 0f,
+                    animationSpec = tween(if (highlightShown) 400 else 800),
+                    label = "highlight"
                 )
+
+                Box(
+                    modifier = if (highlightAlpha > 0f) {
+                        Modifier.drawBehind {
+                            drawRoundRect(
+                                color = accent.copy(alpha = 0.10f * highlightAlpha),
+                                cornerRadius = CornerRadius(16.dp.toPx())
+                            )
+                        }
+                    } else Modifier
+                ) {
+                    TipCard(
+                        tip = tip,
+                        accent = accent,
+                        isBookmarked = bookmarkedIds.contains(tip.id),
+                        onBookmarkToggle = { viewModel.toggleBookmark(tip) },
+                        index = index
+                    )
+                }
             }
         }
     }

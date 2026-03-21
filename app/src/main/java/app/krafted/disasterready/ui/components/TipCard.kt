@@ -133,7 +133,6 @@ fun TipCard(
                     .weight(1f)
                     .padding(start = 13.dp, end = 6.dp, top = 11.dp, bottom = 13.dp)
             ) {
-                // Disaster type header (only shown when label is provided)
                 if (disasterLabel != null) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -175,7 +174,6 @@ fun TipCard(
                         )
                     }
 
-                    // Separator
                     Box(
                         modifier = Modifier
                             .padding(top = 8.dp, bottom = 10.dp, end = 6.dp)

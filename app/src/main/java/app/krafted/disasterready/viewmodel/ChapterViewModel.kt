@@ -26,6 +26,9 @@ class ChapterViewModel(application: Application) : AndroidViewModel(application)
     private val _activePhase = MutableStateFlow(Phase.BEFORE)
     val activePhase: StateFlow<Phase> = _activePhase.asStateFlow()
 
+    private val _highlightTipId = MutableStateFlow<Int?>(null)
+    val highlightTipId: StateFlow<Int?> = _highlightTipId.asStateFlow()
+
     private var _chapter: Chapter? = null
     val chapter: StateFlow<Chapter?> get() = _chapterState
     private val _chapterState = MutableStateFlow<Chapter?>(null)
@@ -41,14 +44,29 @@ class ChapterViewModel(application: Application) : AndroidViewModel(application)
         .combine(MutableStateFlow(Unit)) { ids, _ -> ids.toSet() }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptySet())
 
-    fun loadChapter(chapterId: String) {
-        if (_chapterId.value == chapterId) return
+    fun loadChapter(chapterId: String, highlightTipId: Int? = null) {
+        _highlightTipId.value = highlightTipId
+        if (_chapterId.value == chapterId && _chapterState.value != null) {
+            if (highlightTipId != null) {
+                val tip = _chapter?.tips?.find { it.id == highlightTipId }
+                if (tip != null) _activePhase.value = tip.phase
+            }
+            return
+        }
         _chapterId.value = chapterId
         viewModelScope.launch {
             repository.loadChapters()
             _chapter = repository.getChapter(chapterId)
             _chapterState.value = _chapter
+            if (highlightTipId != null) {
+                val tip = _chapter?.tips?.find { it.id == highlightTipId }
+                if (tip != null) _activePhase.value = tip.phase
+            }
         }
+    }
+
+    fun clearHighlight() {
+        _highlightTipId.value = null
     }
 
     fun setActivePhase(phase: Phase) {

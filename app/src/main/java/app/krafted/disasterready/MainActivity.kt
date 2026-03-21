@@ -12,11 +12,8 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavType
@@ -27,6 +24,7 @@ import androidx.navigation.navArgument
 import app.krafted.disasterready.ui.BookmarksScreen
 import app.krafted.disasterready.ui.ChapterScreen
 import app.krafted.disasterready.ui.HomeScreen
+import app.krafted.disasterready.ui.SearchScreen
 import app.krafted.disasterready.ui.theme.DisasterReadyTheme
 
 class MainActivity : ComponentActivity() {
@@ -44,11 +42,14 @@ class MainActivity : ComponentActivity() {
 object Routes {
     const val SPLASH = "splash"
     const val HOME = "home"
-    const val CHAPTER = "chapter/{chapterId}"
+    const val CHAPTER = "chapter/{chapterId}?tipId={tipId}"
     const val BOOKMARKS = "bookmarks"
     const val SEARCH = "search"
 
-    fun chapter(chapterId: String) = "chapter/$chapterId"
+    fun chapter(chapterId: String, tipId: Int? = null): String {
+        return if (tipId != null) "chapter/$chapterId?tipId=$tipId"
+        else "chapter/$chapterId"
+    }
 }
 
 @Composable
@@ -112,11 +113,19 @@ fun DisasterReadyApp() {
 
         composable(
             route = Routes.CHAPTER,
-            arguments = listOf(navArgument("chapterId") { type = NavType.StringType })
+            arguments = listOf(
+                navArgument("chapterId") { type = NavType.StringType },
+                navArgument("tipId") {
+                    type = NavType.IntType
+                    defaultValue = -1
+                }
+            )
         ) { backStackEntry ->
             val chapterId = backStackEntry.arguments?.getString("chapterId") ?: ""
+            val tipId = backStackEntry.arguments?.getInt("tipId", -1) ?: -1
             ChapterScreen(
                 chapterId = chapterId,
+                highlightTipId = if (tipId >= 0) tipId else null,
                 onBackClick = { navController.popBackStack() }
             )
         }
@@ -128,23 +137,12 @@ fun DisasterReadyApp() {
         }
 
         composable(Routes.SEARCH) {
-            PlaceholderScreen("Search")
+            SearchScreen(
+                onBackClick = { navController.popBackStack() },
+                onResultClick = { chapterId, tipId ->
+                    navController.navigate(Routes.chapter(chapterId, tipId))
+                }
+            )
         }
-    }
-}
-
-@Composable
-private fun PlaceholderScreen(label: String) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFF0A0D14)),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = label,
-            style = MaterialTheme.typography.headlineMedium,
-            color = Color.White
-        )
     }
 }
