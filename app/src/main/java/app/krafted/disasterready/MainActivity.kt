@@ -24,6 +24,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import app.krafted.disasterready.ui.ChapterScreen
 import app.krafted.disasterready.ui.HomeScreen
 import app.krafted.disasterready.ui.theme.DisasterReadyTheme
 
@@ -113,7 +114,10 @@ fun DisasterReadyApp() {
             arguments = listOf(navArgument("chapterId") { type = NavType.StringType })
         ) { backStackEntry ->
             val chapterId = backStackEntry.arguments?.getString("chapterId") ?: ""
-            PlaceholderScreen("Chapter: $chapterId") {}
+            ChapterScreen(
+                chapterId = chapterId,
+                onBackClick = { navController.popBackStack() }
+            )
         }
 
         composable(Routes.BOOKMARKS) {
