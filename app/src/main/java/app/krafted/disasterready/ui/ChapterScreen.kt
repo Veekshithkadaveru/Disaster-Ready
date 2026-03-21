@@ -27,8 +27,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Bookmark
-import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -56,14 +54,12 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import app.krafted.disasterready.data.model.Chapter
 import app.krafted.disasterready.data.model.Phase
-import app.krafted.disasterready.data.model.Severity
 import app.krafted.disasterready.data.model.Tip
+import app.krafted.disasterready.ui.components.TipCard
 import app.krafted.disasterready.ui.theme.DarkBackground
 import app.krafted.disasterready.ui.theme.DarkBorder
-import app.krafted.disasterready.ui.theme.DarkBorderSubtle
 import app.krafted.disasterready.ui.theme.DarkSurfaceHigh
 import app.krafted.disasterready.ui.theme.TextPrimary
-import app.krafted.disasterready.ui.theme.TextSecondary
 import app.krafted.disasterready.ui.theme.TextTertiary
 import app.krafted.disasterready.viewmodel.ChapterViewModel
 
@@ -105,7 +101,6 @@ fun ChapterScreen(
             .fillMaxSize()
             .background(DarkBackground)
     ) {
-        // Full-bleed background image
         if (backgroundResId != 0) {
             Image(
                 painter = painterResource(id = backgroundResId),
@@ -117,7 +112,6 @@ fun ChapterScreen(
             )
         }
 
-        // Multi-stop overlay gradient matching HomeScreen editorial feel
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -134,7 +128,6 @@ fun ChapterScreen(
                 )
         )
 
-        // Subtle accent glow from top-left
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -153,7 +146,6 @@ fun ChapterScreen(
             contentPadding = PaddingValues(bottom = 40.dp),
             modifier = Modifier.navigationBarsPadding()
         ) {
-            // Header with gradient fade
             item {
                 ChapterHeader(
                     chapter = chapterData,
@@ -163,7 +155,6 @@ fun ChapterScreen(
                 )
             }
 
-            // Quick fact
             item {
                 QuickFactCard(
                     quickFact = chapterData.quickFact,
@@ -171,7 +162,6 @@ fun ChapterScreen(
                 )
             }
 
-            // Section label + Phase tabs
             item {
                 SectionLabel(
                     text = "SURVIVAL TIPS",
@@ -187,9 +177,8 @@ fun ChapterScreen(
                 )
             }
 
-            // Tip list
             itemsIndexed(filteredTips) { index, tip ->
-                TipItem(
+                TipCard(
                     tip = tip,
                     accent = accent,
                     isBookmarked = bookmarkedIds.contains(tip.id),
@@ -229,7 +218,6 @@ private fun ChapterHeader(
                 .padding(horizontal = 24.dp)
                 .padding(top = 16.dp, bottom = 28.dp)
         ) {
-            // Back button — same style as HomeScreen header icons
             Box(
                 modifier = Modifier
                     .size(40.dp)
@@ -258,7 +246,6 @@ private fun ChapterHeader(
                 verticalAlignment = Alignment.Top
             ) {
                 Column(modifier = Modifier.weight(1f)) {
-                    // Title with accent gradient — mirroring "Ready." gradient style
                     Text(
                         text = chapter.title,
                         style = MaterialTheme.typography.headlineLarge.copy(
@@ -277,7 +264,6 @@ private fun ChapterHeader(
 
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    // Accent divider — same as HomeScreen brand bar
                     Box(
                         modifier = Modifier
                             .width(32.dp)
@@ -306,7 +292,6 @@ private fun ChapterHeader(
 
                     Spacer(modifier = Modifier.height(6.dp))
 
-                    // Tip count pill — same style as HomeScreen card badges
                     Box(
                         modifier = Modifier
                             .clip(RoundedCornerShape(6.dp))
@@ -324,7 +309,6 @@ private fun ChapterHeader(
                     }
                 }
 
-                // Icon — larger with subtle glow backdrop
                 if (iconResId != 0) {
                     Box(
                         modifier = Modifier
@@ -332,7 +316,6 @@ private fun ChapterHeader(
                             .padding(top = 4.dp),
                         contentAlignment = Alignment.Center
                     ) {
-                        // Glow ring behind icon
                         Box(
                             modifier = Modifier
                                 .size(80.dp)
@@ -369,18 +352,15 @@ private fun QuickFactCard(quickFact: String, accent: Color) {
             .padding(horizontal = 16.dp, vertical = 8.dp)
             .clip(RoundedCornerShape(16.dp))
     ) {
-        // Multi-layer glass background — matching HomeScreen card compositing
         Box(
             modifier = Modifier
                 .matchParentSize()
                 .drawBehind {
-                    // Base fill
                     drawRoundRect(
                         color = DarkSurfaceHigh.copy(alpha = 0.78f),
                         cornerRadius = CornerRadius(16.dp.toPx())
                     )
 
-                    // Accent glow from left
                     drawRoundRect(
                         brush = Brush.horizontalGradient(
                             colors = listOf(
@@ -393,7 +373,6 @@ private fun QuickFactCard(quickFact: String, accent: Color) {
                         cornerRadius = CornerRadius(16.dp.toPx())
                     )
 
-                    // Top-light shimmer
                     drawRoundRect(
                         brush = Brush.verticalGradient(
                             colors = listOf(
@@ -406,7 +385,6 @@ private fun QuickFactCard(quickFact: String, accent: Color) {
                         cornerRadius = CornerRadius(16.dp.toPx())
                     )
 
-                    // Border stroke
                     drawRoundRect(
                         color = DarkBorder.copy(alpha = 0.6f),
                         cornerRadius = CornerRadius(16.dp.toPx()),
@@ -420,7 +398,6 @@ private fun QuickFactCard(quickFact: String, accent: Color) {
                 .fillMaxWidth()
                 .height(IntrinsicSize.Min)
         ) {
-            // Left accent bar
             Box(
                 modifier = Modifier
                     .width(4.dp)
@@ -515,7 +492,6 @@ private fun PhaseTabs(
                     .then(
                         if (isSelected) {
                             Modifier.drawBehind {
-                                // Active: accent-tinted glass
                                 drawRoundRect(
                                     color = accent.copy(alpha = 0.15f),
                                     cornerRadius = CornerRadius(12.dp.toPx())
@@ -539,7 +515,6 @@ private fun PhaseTabs(
                             }
                         } else {
                             Modifier.drawBehind {
-                                // Inactive: subtle glass
                                 drawRoundRect(
                                     color = DarkSurfaceHigh.copy(alpha = 0.5f),
                                     cornerRadius = CornerRadius(12.dp.toPx())
@@ -567,175 +542,6 @@ private fun PhaseTabs(
                         letterSpacing = 1.6.sp
                     ),
                     color = if (isSelected) accent else TextTertiary
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun TipItem(
-    tip: Tip,
-    accent: Color,
-    isBookmarked: Boolean,
-    onBookmarkToggle: () -> Unit,
-    index: Int
-) {
-    val severityColor = remember(tip.severity) {
-        when (tip.severity) {
-            Severity.CRITICAL -> Color(0xFFC62828)
-            Severity.HIGH -> Color(0xFFE65100)
-            Severity.MEDIUM -> Color(0xFFF9A825)
-        }
-    }
-
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 5.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = ripple(bounded = true, color = accent.copy(alpha = 0.2f)),
-                onClick = onBookmarkToggle
-            )
-    ) {
-        // Multi-layer glass — same compositing as HomeScreen ChapterCard
-        Box(
-            modifier = Modifier
-                .matchParentSize()
-                .drawBehind {
-                    // Base fill
-                    drawRoundRect(
-                        color = Color(0xFF111620),
-                        cornerRadius = CornerRadius(16.dp.toPx())
-                    )
-
-                    // Accent glow from left edge
-                    drawRoundRect(
-                        brush = Brush.horizontalGradient(
-                            colors = listOf(
-                                accent.copy(alpha = 0.08f),
-                                Color.Transparent
-                            ),
-                            startX = 0f,
-                            endX = size.width * 0.4f
-                        ),
-                        cornerRadius = CornerRadius(16.dp.toPx())
-                    )
-
-                    // Top-light shimmer
-                    drawRoundRect(
-                        brush = Brush.verticalGradient(
-                            colors = listOf(
-                                Color.White.copy(alpha = 0.04f),
-                                Color.Transparent
-                            ),
-                            startY = 0f,
-                            endY = size.height * 0.3f
-                        ),
-                        cornerRadius = CornerRadius(16.dp.toPx())
-                    )
-
-                    // Border stroke
-                    drawRoundRect(
-                        color = DarkBorder.copy(alpha = 0.6f),
-                        cornerRadius = CornerRadius(16.dp.toPx()),
-                        style = Stroke(width = 0.5.dp.toPx())
-                    )
-                }
-        )
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(IntrinsicSize.Min)
-        ) {
-            // Left accent bar — severity colored
-            Box(
-                modifier = Modifier
-                    .width(4.dp)
-                    .fillMaxHeight()
-                    .padding(vertical = 12.dp)
-                    .clip(RoundedCornerShape(2.dp))
-                    .background(severityColor)
-            )
-
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(start = 16.dp, end = 8.dp, top = 16.dp, bottom = 16.dp)
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    // Severity badge
-                    Box(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(6.dp))
-                            .background(severityColor.copy(alpha = 0.12f))
-                            .padding(horizontal = 10.dp, vertical = 4.dp)
-                    ) {
-                        Text(
-                            text = tip.severity.name,
-                            style = MaterialTheme.typography.labelSmall.copy(
-                                fontWeight = FontWeight.Bold,
-                                letterSpacing = 0.8.sp,
-                                fontSize = 10.sp
-                            ),
-                            color = severityColor
-                        )
-                    }
-
-                    // Bookmark button
-                    Box(
-                        modifier = Modifier
-                            .size(36.dp)
-                            .clip(CircleShape)
-                            .background(
-                                if (isBookmarked) accent.copy(alpha = 0.12f)
-                                else Color.Transparent
-                            )
-                            .clickable(
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = ripple(bounded = true, radius = 18.dp),
-                                onClick = onBookmarkToggle
-                            ),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = if (isBookmarked) Icons.Filled.Bookmark
-                            else Icons.Filled.BookmarkBorder,
-                            contentDescription = if (isBookmarked) "Remove bookmark"
-                            else "Add bookmark",
-                            tint = if (isBookmarked) accent else TextTertiary,
-                            modifier = Modifier.size(18.dp)
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                Text(
-                    text = tip.title,
-                    style = MaterialTheme.typography.titleSmall.copy(
-                        fontWeight = FontWeight.SemiBold,
-                        letterSpacing = (-0.2).sp
-                    ),
-                    color = TextPrimary
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Text(
-                    text = tip.body,
-                    style = MaterialTheme.typography.bodySmall.copy(
-                        lineHeight = 20.sp,
-                        letterSpacing = 0.1.sp
-                    ),
-                    color = TextSecondary
                 )
             }
         }
