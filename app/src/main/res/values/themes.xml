@@ -8,7 +8,7 @@
         <item name="postSplashScreenTheme">@style/Theme.DisasterReady.Main</item>
     </style>
 
-    <style name="Theme.DisasterReady.Main" parent="android:Theme.Material.Light.NoActionBar">
+    <style name="Theme.DisasterReady.Main" parent="android:Theme.Material.NoActionBar">
         <item name="android:windowBackground">@color/ic_launcher_background</item>
     </style>
 

@@ -44,10 +44,12 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import app.krafted.disasterready.R
 import app.krafted.disasterready.data.model.Tip
 import app.krafted.disasterready.ui.theme.DarkBorder
 import app.krafted.disasterready.ui.theme.TextPrimary
@@ -226,8 +228,8 @@ fun TipCard(
                         Icon(
                             imageVector = if (isBookmarked) Icons.Filled.Bookmark
                             else Icons.Filled.BookmarkBorder,
-                            contentDescription = if (isBookmarked) "Remove bookmark"
-                            else "Add bookmark",
+                            contentDescription = if (isBookmarked) stringResource(R.string.tip_remove_bookmark)
+                            else stringResource(R.string.tip_add_bookmark),
                             tint = if (isBookmarked) accent else TextTertiary,
                             modifier = Modifier
                                 .size(14.dp)

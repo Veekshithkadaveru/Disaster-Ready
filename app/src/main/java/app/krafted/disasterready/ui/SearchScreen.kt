@@ -1,6 +1,5 @@
 package app.krafted.disasterready.ui
 
-import android.graphics.Color as AndroidColor
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -60,6 +59,8 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -68,6 +69,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import app.krafted.disasterready.R
 import app.krafted.disasterready.ui.components.SeverityBadge
 import app.krafted.disasterready.ui.components.severityColor
 import app.krafted.disasterready.ui.theme.DarkBackground
@@ -77,6 +79,7 @@ import app.krafted.disasterready.ui.theme.TextSecondary
 import app.krafted.disasterready.ui.theme.TextTertiary
 import app.krafted.disasterready.viewmodel.SearchResult
 import app.krafted.disasterready.viewmodel.SearchViewModel
+import android.graphics.Color as AndroidColor
 
 @Composable
 fun SearchScreen(
@@ -173,7 +176,7 @@ private fun SearchHeader(
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = "Back",
+                contentDescription = stringResource(R.string.search_back),
                 tint = Color.White.copy(alpha = 0.85f),
                 modifier = Modifier.size(20.dp)
             )
@@ -182,7 +185,7 @@ private fun SearchHeader(
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            text = "Search",
+            text = stringResource(R.string.search_title),
             style = MaterialTheme.typography.headlineLarge.copy(
                 fontSize = 34.sp,
                 fontWeight = FontWeight.ExtraBold,
@@ -194,7 +197,7 @@ private fun SearchHeader(
         Spacer(modifier = Modifier.height(6.dp))
 
         Text(
-            text = "Find tips across all disaster guides",
+            text = stringResource(R.string.search_subtitle),
             style = MaterialTheme.typography.bodyMedium.copy(
                 fontWeight = FontWeight.Medium,
                 letterSpacing = 0.3.sp
@@ -305,7 +308,7 @@ private fun SearchField(
                     Box {
                         if (query.isEmpty()) {
                             Text(
-                                text = "Search tips, disasters...",
+                                text = stringResource(R.string.search_placeholder),
                                 style = MaterialTheme.typography.bodyMedium.copy(
                                     fontWeight = FontWeight.Medium
                                 ),
@@ -336,7 +339,7 @@ private fun SearchField(
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Close,
-                        contentDescription = "Clear",
+                        contentDescription = stringResource(R.string.search_clear),
                         tint = TextSecondary,
                         modifier = Modifier.size(14.dp)
                     )
@@ -347,8 +350,6 @@ private fun SearchField(
 }
 
 
-
-
 @Composable
 private fun ResultCountBar(count: Int) {
     Row(
@@ -357,24 +358,8 @@ private fun ResultCountBar(count: Int) {
             .padding(horizontal = 24.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Box(
-            modifier = Modifier
-                .clip(RoundedCornerShape(6.dp))
-                .background(Color.White.copy(alpha = 0.06f))
-                .padding(horizontal = 10.dp, vertical = 4.dp)
-        ) {
-            Text(
-                text = "$count",
-                style = MaterialTheme.typography.labelSmall.copy(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 11.sp
-                ),
-                color = Color(0xFFE53935)
-            )
-        }
-
         Text(
-            text = "  result${if (count != 1) "s" else ""} found",
+            text = pluralStringResource(R.plurals.search_results_found, count, count),
             style = MaterialTheme.typography.labelSmall.copy(
                 fontWeight = FontWeight.SemiBold,
                 letterSpacing = 0.3.sp
@@ -417,7 +402,7 @@ private fun EmptySearchState(query: String) {
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            text = "No results found",
+            text = stringResource(R.string.search_no_results),
             style = MaterialTheme.typography.titleMedium.copy(
                 fontWeight = FontWeight.SemiBold
             ),
@@ -427,7 +412,7 @@ private fun EmptySearchState(query: String) {
         Spacer(modifier = Modifier.height(6.dp))
 
         Text(
-            text = "Nothing matched \"$query\"",
+            text = stringResource(R.string.search_nothing_matched, query),
             style = MaterialTheme.typography.bodySmall.copy(
                 letterSpacing = 0.2.sp
             ),

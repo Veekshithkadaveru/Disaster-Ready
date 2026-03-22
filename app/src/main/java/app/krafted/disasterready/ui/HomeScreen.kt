@@ -1,6 +1,9 @@
 package app.krafted.disasterready.ui
 
-import android.graphics.Color as AndroidColor
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -29,18 +32,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.ripple
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.tween
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -51,28 +46,30 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import app.krafted.disasterready.R
 import app.krafted.disasterready.data.model.Chapter
 import app.krafted.disasterready.ui.theme.DarkBackground
 import app.krafted.disasterready.ui.theme.DarkBorder
-import app.krafted.disasterready.ui.theme.DarkSurfaceHigh
 import app.krafted.disasterready.ui.theme.TextPrimary
 import app.krafted.disasterready.ui.theme.TextSecondary
 import app.krafted.disasterready.ui.theme.TextTertiary
-import app.krafted.disasterready.R
 import app.krafted.disasterready.viewmodel.HomeViewModel
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import android.graphics.Color as AndroidColor
 
 @Composable
 fun HomeScreen(
@@ -157,7 +154,7 @@ private fun HomeHeader(
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = "Disaster",
+                        text = stringResource(R.string.home_title_disaster),
                         style = MaterialTheme.typography.headlineLarge.copy(
                             fontSize = 40.sp,
                             fontWeight = FontWeight.ExtraBold,
@@ -167,7 +164,7 @@ private fun HomeHeader(
                         color = Color.White
                     )
                     Text(
-                        text = "Ready.",
+                        text = stringResource(R.string.home_title_ready),
                         style = MaterialTheme.typography.headlineLarge.copy(
                             fontSize = 40.sp,
                             fontWeight = FontWeight.ExtraBold,
@@ -199,7 +196,7 @@ private fun HomeHeader(
                     Spacer(modifier = Modifier.height(14.dp))
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
-                            text = "Know what to do.",
+                            text = stringResource(R.string.home_subtitle_know),
                             style = MaterialTheme.typography.bodyMedium.copy(
                                 fontWeight = FontWeight.Medium,
                                 letterSpacing = 0.3.sp
@@ -208,7 +205,7 @@ private fun HomeHeader(
                         )
                         Spacer(modifier = Modifier.width(6.dp))
                         Text(
-                            text = "Stay alive.",
+                            text = stringResource(R.string.home_subtitle_stay_alive),
                             style = MaterialTheme.typography.bodyMedium.copy(
                                 fontWeight = FontWeight.SemiBold,
                                 letterSpacing = 0.3.sp
@@ -224,7 +221,7 @@ private fun HomeHeader(
                     HeaderIconButton(onClick = onSearchClick) {
                         Icon(
                             imageVector = Icons.Filled.Search,
-                            contentDescription = "Search",
+                            contentDescription = stringResource(R.string.home_search),
                             tint = Color.White.copy(alpha = 0.85f),
                             modifier = Modifier.size(20.dp)
                         )
@@ -232,7 +229,7 @@ private fun HomeHeader(
                     HeaderIconButton(onClick = onBookmarksClick) {
                         Icon(
                             imageVector = Icons.Filled.BookmarkBorder,
-                            contentDescription = "Bookmarks",
+                            contentDescription = stringResource(R.string.home_bookmarks),
                             tint = Color.White.copy(alpha = 0.85f),
                             modifier = Modifier.size(20.dp)
                         )
@@ -281,7 +278,7 @@ private fun SectionLabel() {
         )
         Spacer(modifier = Modifier.width(10.dp))
         Text(
-            text = "SURVIVAL GUIDES",
+            text = stringResource(R.string.home_section_survival_guides),
             style = MaterialTheme.typography.labelMedium.copy(
                 letterSpacing = 2.4.sp,
                 fontWeight = FontWeight.Bold
@@ -365,7 +362,9 @@ private fun ChapterCard(chapter: Chapter, index: Int, onClick: () -> Unit) {
                 onClick = onClick
             )
     ) {
-        Box(modifier = Modifier.matchParentSize().background(Color(0xFF111620)))
+        Box(modifier = Modifier
+            .matchParentSize()
+            .background(Color(0xFF111620)))
 
         if (backgroundResId != 0) {
             Image(
@@ -473,7 +472,7 @@ private fun ChapterCard(chapter: Chapter, index: Int, onClick: () -> Unit) {
                             .padding(horizontal = 10.dp, vertical = 4.dp)
                     ) {
                         Text(
-                            text = "${chapter.tips.size} tips",
+                            text = stringResource(R.string.home_tips_count, chapter.tips.size),
                             style = MaterialTheme.typography.labelSmall.copy(
                                 fontWeight = FontWeight.SemiBold,
                                 letterSpacing = 0.4.sp

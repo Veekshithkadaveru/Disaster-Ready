@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import app.krafted.disasterready.R
 import kotlinx.coroutines.coroutineScope
@@ -47,12 +48,12 @@ fun SplashScreen(onSplashFinished: () -> Unit) {
 
     val scaleAnim = remember { Animatable(0f) }
     val alphaAnim = remember { Animatable(0f) }
-    val glowAnim  = remember { Animatable(0f) }
+    val glowAnim = remember { Animatable(0f) }
 
     val infinite = rememberInfiniteTransition(label = "glow_pulse")
     val pulseScale by infinite.animateFloat(
-        initialValue  = 1f,
-        targetValue   = 1.12f,
+        initialValue = 1f,
+        targetValue = 1.12f,
         animationSpec = infiniteRepeatable(
             tween(900, easing = FastOutSlowInEasing),
             RepeatMode.Reverse
@@ -114,15 +115,15 @@ fun SplashScreen(onSplashFinished: () -> Unit) {
             )
 
             Image(
-                painter            = painterResource(R.drawable.ic_splash_logo),
-                contentDescription = "Disaster Ready",
-                contentScale       = ContentScale.Crop,
-                modifier           = Modifier
+                painter = painterResource(R.drawable.ic_splash_logo),
+                contentDescription = stringResource(R.string.splash_logo_description),
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
                     .size(130.dp)
                     .graphicsLayer {
                         scaleX = logoScale
                         scaleY = logoScale
-                        alpha  = logoAlpha
+                        alpha = logoAlpha
                     }
                     .clip(CircleShape)
                     .border(

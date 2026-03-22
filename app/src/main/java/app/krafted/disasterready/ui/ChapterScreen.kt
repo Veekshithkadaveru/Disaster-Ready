@@ -1,11 +1,5 @@
 package app.krafted.disasterready.ui
 
-import android.graphics.Color as AndroidColor
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -13,17 +7,11 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
-import androidx.compose.animation.togetherWith
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -71,13 +59,14 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import app.krafted.disasterready.R
 import app.krafted.disasterready.data.model.Chapter
 import app.krafted.disasterready.data.model.Phase
-import app.krafted.disasterready.data.model.Tip
 import app.krafted.disasterready.ui.components.TipCard
 import app.krafted.disasterready.ui.theme.DarkBackground
 import app.krafted.disasterready.ui.theme.DarkBorder
@@ -85,6 +74,10 @@ import app.krafted.disasterready.ui.theme.DarkSurfaceHigh
 import app.krafted.disasterready.ui.theme.TextPrimary
 import app.krafted.disasterready.ui.theme.TextTertiary
 import app.krafted.disasterready.viewmodel.ChapterViewModel
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import android.graphics.Color as AndroidColor
 
 @Composable
 fun ChapterScreen(
@@ -214,7 +207,7 @@ fun ChapterScreen(
 
             item {
                 SectionLabel(
-                    text = "SURVIVAL TIPS",
+                    text = stringResource(R.string.chapter_section_survival_tips),
                     accent = accent
                 )
             }
@@ -340,7 +333,7 @@ private fun ChapterHeader(
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back",
+                    contentDescription = stringResource(R.string.chapter_back),
                     tint = Color.White.copy(alpha = 0.85f),
                     modifier = Modifier.size(20.dp)
                 )
@@ -407,7 +400,7 @@ private fun ChapterHeader(
                             .padding(horizontal = 10.dp, vertical = 4.dp)
                     ) {
                         Text(
-                            text = "${chapter.tips.size} tips",
+                            text = stringResource(R.string.chapter_tips_count, chapter.tips.size),
                             style = MaterialTheme.typography.labelSmall.copy(
                                 fontWeight = FontWeight.SemiBold,
                                 letterSpacing = 0.4.sp
@@ -534,7 +527,7 @@ private fun QuickFactCard(quickFact: String, accent: Color) {
                     .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 16.dp)
             ) {
                 Text(
-                    text = "QUICK FACT",
+                    text = stringResource(R.string.chapter_quick_fact),
                     style = MaterialTheme.typography.labelSmall.copy(
                         letterSpacing = 2.4.sp,
                         fontWeight = FontWeight.Bold

@@ -1,6 +1,5 @@
 package app.krafted.disasterready.ui
 
-import android.graphics.Color as AndroidColor
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -37,15 +36,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import app.krafted.disasterready.R
 import app.krafted.disasterready.ui.components.TipCard
 import app.krafted.disasterready.ui.theme.DarkBackground
 import app.krafted.disasterready.ui.theme.TextSecondary
 import app.krafted.disasterready.ui.theme.TextTertiary
 import app.krafted.disasterready.viewmodel.BookmarkViewModel
+import android.graphics.Color as AndroidColor
 
 @Composable
 fun BookmarksScreen(
@@ -127,7 +129,7 @@ private fun BookmarksHeader(
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = "Back",
+                contentDescription = stringResource(R.string.bookmarks_back),
                 tint = Color.White.copy(alpha = 0.85f),
                 modifier = Modifier.size(20.dp)
             )
@@ -136,7 +138,7 @@ private fun BookmarksHeader(
         Spacer(modifier = Modifier.height(28.dp))
 
         Text(
-            text = "Saved Tips",
+            text = stringResource(R.string.bookmarks_title),
             style = MaterialTheme.typography.headlineLarge.copy(
                 fontSize = 34.sp,
                 fontWeight = FontWeight.ExtraBold,
@@ -148,8 +150,12 @@ private fun BookmarksHeader(
         Spacer(modifier = Modifier.height(6.dp))
 
         Text(
-            text = if (totalCount == 0) "No tips saved yet"
-            else "$totalCount saved tip${if (totalCount != 1) "s" else ""}",
+            text = if (totalCount == 0) stringResource(R.string.bookmarks_no_tips_saved)
+            else if (totalCount != 1) stringResource(
+                R.string.bookmarks_saved_tips_plural,
+                totalCount
+            )
+            else stringResource(R.string.bookmarks_saved_tip_singular, totalCount),
             style = MaterialTheme.typography.bodyMedium.copy(
                 fontWeight = FontWeight.Medium,
                 letterSpacing = 0.3.sp
@@ -204,7 +210,7 @@ private fun EmptyBookmarksState() {
             Spacer(modifier = Modifier.height(20.dp))
 
             Text(
-                text = "No saved tips yet",
+                text = stringResource(R.string.bookmarks_empty_title),
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
@@ -214,7 +220,7 @@ private fun EmptyBookmarksState() {
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Bookmark tips from any disaster guide",
+                text = stringResource(R.string.bookmarks_empty_subtitle),
                 style = MaterialTheme.typography.bodySmall,
                 color = TextTertiary
             )
