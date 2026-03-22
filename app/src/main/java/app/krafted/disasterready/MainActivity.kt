@@ -4,18 +4,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -25,10 +20,12 @@ import app.krafted.disasterready.ui.BookmarksScreen
 import app.krafted.disasterready.ui.ChapterScreen
 import app.krafted.disasterready.ui.HomeScreen
 import app.krafted.disasterready.ui.SearchScreen
+import app.krafted.disasterready.ui.SplashScreen
 import app.krafted.disasterready.ui.theme.DisasterReadyTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
@@ -85,15 +82,12 @@ fun DisasterReadyApp() {
         }
     ) {
         composable(Routes.SPLASH) {
-            LaunchedEffect(Unit) {
-                navController.navigate(Routes.HOME) {
-                    popUpTo(Routes.SPLASH) { inclusive = true }
+            SplashScreen(
+                onSplashFinished = {
+                    navController.navigate(Routes.HOME) {
+                        popUpTo(Routes.SPLASH) { inclusive = true }
+                    }
                 }
-            }
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color(0xFF0A0D14))
             )
         }
 
