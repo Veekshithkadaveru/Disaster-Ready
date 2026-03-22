@@ -34,7 +34,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import kotlinx.coroutines.launch
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -43,6 +49,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -291,6 +298,37 @@ private fun SectionLabel() {
 
 @Composable
 private fun ChapterCard(chapter: Chapter, index: Int, onClick: () -> Unit) {
+    val offsetY = remember { Animatable(40f) }
+    val cardAlpha = remember { Animatable(0f) }
+    val accentProgress = remember { Animatable(0f) }
+
+    LaunchedEffect(Unit) {
+        kotlinx.coroutines.delay(index * 80L)
+        kotlinx.coroutines.coroutineScope {
+            launch {
+                offsetY.animateTo(
+                    targetValue = 0f,
+                    animationSpec = spring(
+                        dampingRatio = Spring.DampingRatioMediumBouncy,
+                        stiffness = Spring.StiffnessLow
+                    )
+                )
+            }
+            launch {
+                cardAlpha.animateTo(
+                    targetValue = 1f,
+                    animationSpec = tween(durationMillis = 300)
+                )
+            }
+            launch {
+                accentProgress.animateTo(
+                    targetValue = 1f,
+                    animationSpec = tween(durationMillis = 400)
+                )
+            }
+        }
+    }
+
     val accent = remember(chapter.accentColor) {
         try {
             Color(AndroidColor.parseColor(chapter.accentColor))
@@ -311,6 +349,10 @@ private fun ChapterCard(chapter: Chapter, index: Int, onClick: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 5.dp)
+            .graphicsLayer {
+                translationY = offsetY.value
+                alpha = cardAlpha.value
+            }
             .clip(RoundedCornerShape(16.dp))
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
@@ -396,6 +438,10 @@ private fun ChapterCard(chapter: Chapter, index: Int, onClick: () -> Unit) {
                     .fillMaxHeight()
                     .padding(vertical = 12.dp)
                     .clip(RoundedCornerShape(2.dp))
+                    .graphicsLayer {
+                        scaleY = accentProgress.value
+                        alpha = accentProgress.value
+                    }
                     .background(accent)
             )
 

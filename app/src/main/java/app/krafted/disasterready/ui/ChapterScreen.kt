@@ -5,8 +5,23 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
+import kotlinx.coroutines.launch
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -50,6 +65,7 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -103,6 +119,18 @@ fun ChapterScreen(
         context.resources.getIdentifier(chapterData.icon, "drawable", context.packageName)
     }
 
+    val listState = rememberLazyListState()
+
+    val parallaxOffset = remember(listState) {
+        androidx.compose.runtime.derivedStateOf {
+            if (listState.firstVisibleItemIndex == 0) {
+                listState.firstVisibleItemScrollOffset * 0.4f
+            } else {
+                200f
+            }
+        }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -115,6 +143,9 @@ fun ChapterScreen(
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxSize()
+                    .graphicsLayer {
+                        translationY = -parallaxOffset.value
+                    }
                     .alpha(0.45f)
             )
         }
@@ -148,8 +179,6 @@ fun ChapterScreen(
                     )
                 )
         )
-
-        val listState = rememberLazyListState()
 
         LaunchedEffect(currentHighlightId, filteredTips) {
             if (currentHighlightId != null && filteredTips.isNotEmpty()) {
@@ -197,6 +226,29 @@ fun ChapterScreen(
             }
 
             itemsIndexed(filteredTips) { index, tip ->
+                val tipOffsetY = remember { Animatable(30f) }
+                val tipAlpha = remember { Animatable(0f) }
+
+                LaunchedEffect(tip.id, activePhase) {
+                    tipOffsetY.snapTo(30f)
+                    tipAlpha.snapTo(0f)
+                    kotlinx.coroutines.delay(index * 60L)
+                    kotlinx.coroutines.coroutineScope {
+                        launch {
+                            tipOffsetY.animateTo(
+                                targetValue = 0f,
+                                animationSpec = tween(durationMillis = 300)
+                            )
+                        }
+                        launch {
+                            tipAlpha.animateTo(
+                                targetValue = 1f,
+                                animationSpec = tween(durationMillis = 300)
+                            )
+                        }
+                    }
+                }
+
                 val isHighlighted = tip.id == currentHighlightId
                 var highlightShown by remember(tip.id) { mutableStateOf(isHighlighted) }
 
@@ -215,14 +267,21 @@ fun ChapterScreen(
                 )
 
                 Box(
-                    modifier = if (highlightAlpha > 0f) {
-                        Modifier.drawBehind {
-                            drawRoundRect(
-                                color = accent.copy(alpha = 0.10f * highlightAlpha),
-                                cornerRadius = CornerRadius(16.dp.toPx())
-                            )
+                    modifier = Modifier
+                        .graphicsLayer {
+                            translationY = tipOffsetY.value
+                            alpha = tipAlpha.value
                         }
-                    } else Modifier
+                        .then(
+                            if (highlightAlpha > 0f) {
+                                Modifier.drawBehind {
+                                    drawRoundRect(
+                                        color = accent.copy(alpha = 0.10f * highlightAlpha),
+                                        cornerRadius = CornerRadius(16.dp.toPx())
+                                    )
+                                }
+                            } else Modifier
+                        )
                 ) {
                     TipCard(
                         tip = tip,
@@ -357,6 +416,17 @@ private fun ChapterHeader(
                 }
 
                 if (iconResId != 0) {
+                    val infiniteTransition = rememberInfiniteTransition(label = "symbolRotation")
+                    val rotation by infiniteTransition.animateFloat(
+                        initialValue = 0f,
+                        targetValue = 360f,
+                        animationSpec = infiniteRepeatable(
+                            animation = tween(durationMillis = 20000, easing = LinearEasing),
+                            repeatMode = RepeatMode.Restart
+                        ),
+                        label = "rotation"
+                    )
+
                     Box(
                         modifier = Modifier
                             .size(80.dp)
@@ -381,7 +451,9 @@ private fun ChapterHeader(
                         Image(
                             painter = painterResource(id = iconResId),
                             contentDescription = chapter.title,
-                            modifier = Modifier.size(64.dp),
+                            modifier = Modifier
+                                .size(64.dp)
+                                .graphicsLayer { rotationZ = rotation },
                             contentScale = ContentScale.Fit
                         )
                     }
