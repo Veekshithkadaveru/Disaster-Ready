@@ -21,6 +21,8 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -225,15 +227,15 @@ fun ChapterScreen(
                 )
             }
 
-            itemsIndexed(filteredTips) { index, tip ->
+            itemsIndexed(filteredTips, key = { _, tip -> tip.id }) { index, tip ->
                 val tipOffsetY = remember { Animatable(30f) }
                 val tipAlpha = remember { Animatable(0f) }
 
                 LaunchedEffect(tip.id, activePhase) {
                     tipOffsetY.snapTo(30f)
                     tipAlpha.snapTo(0f)
-                    kotlinx.coroutines.delay(index * 60L)
-                    kotlinx.coroutines.coroutineScope {
+                    delay(index * 60L)
+                    coroutineScope {
                         launch {
                             tipOffsetY.animateTo(
                                 targetValue = 0f,
@@ -254,7 +256,7 @@ fun ChapterScreen(
 
                 if (isHighlighted) {
                     LaunchedEffect(Unit) {
-                        kotlinx.coroutines.delay(2500)
+                        delay(2500)
                         highlightShown = false
                         viewModel.clearHighlight()
                     }

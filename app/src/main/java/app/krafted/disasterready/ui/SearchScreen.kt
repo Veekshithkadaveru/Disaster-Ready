@@ -127,7 +127,7 @@ fun SearchScreen(
             itemsIndexed(results, key = { _, r -> r.tip.id }) { index, result ->
                 AnimatedVisibility(
                     visible = true,
-                    enter = fadeIn(tween(220, delayMillis = index.coerceAtMost(8) * 40)) +
+                    enter = fadeIn(tween(200)) +
                             slideInVertically(
                                 initialOffsetY = { it / 4 },
                                 animationSpec = tween(280, delayMillis = index.coerceAtMost(8) * 40)

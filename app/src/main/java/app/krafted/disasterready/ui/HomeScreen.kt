@@ -38,6 +38,8 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -110,7 +112,7 @@ fun HomeScreen(
                 SectionLabel()
             }
 
-            itemsIndexed(chapters) { index, chapter ->
+            itemsIndexed(chapters, key = { _, chapter -> chapter.id }) { index, chapter ->
                 ChapterCard(
                     chapter = chapter,
                     index = index,
@@ -303,8 +305,8 @@ private fun ChapterCard(chapter: Chapter, index: Int, onClick: () -> Unit) {
     val accentProgress = remember { Animatable(0f) }
 
     LaunchedEffect(Unit) {
-        kotlinx.coroutines.delay(index * 80L)
-        kotlinx.coroutines.coroutineScope {
+        delay(index * 80L)
+        coroutineScope {
             launch {
                 offsetY.animateTo(
                     targetValue = 0f,

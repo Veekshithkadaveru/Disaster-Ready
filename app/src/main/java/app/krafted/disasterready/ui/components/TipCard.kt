@@ -25,8 +25,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,6 +45,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import app.krafted.disasterready.data.model.Tip
@@ -65,16 +72,27 @@ fun TipCard(
         else 0
     }
 
+    var pulseTarget by remember { mutableStateOf(1f) }
+    var previousBookmarked by remember { mutableStateOf(isBookmarked) }
+    val pulseScale by animateFloatAsState(
+        targetValue = pulseTarget,
+        animationSpec = spring(stiffness = 500f),
+        label = "bookmarkPulse"
+    )
+    LaunchedEffect(isBookmarked) {
+        if (isBookmarked != previousBookmarked) {
+            previousBookmarked = isBookmarked
+            pulseTarget = 1.3f
+            kotlinx.coroutines.delay(50L)
+            pulseTarget = 1f
+        }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 4.dp)
             .clip(RoundedCornerShape(13.dp))
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = ripple(bounded = true, color = accent.copy(alpha = 0.2f)),
-                onClick = onBookmarkToggle
-            )
     ) {
         Box(
             modifier = Modifier
@@ -211,7 +229,12 @@ fun TipCard(
                             contentDescription = if (isBookmarked) "Remove bookmark"
                             else "Add bookmark",
                             tint = if (isBookmarked) accent else TextTertiary,
-                            modifier = Modifier.size(14.dp)
+                            modifier = Modifier
+                                .size(14.dp)
+                                .graphicsLayer {
+                                    scaleX = pulseScale
+                                    scaleY = pulseScale
+                                }
                         )
                     }
                 }

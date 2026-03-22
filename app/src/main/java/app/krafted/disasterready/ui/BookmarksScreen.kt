@@ -68,7 +68,7 @@ fun BookmarksScreen(
             contentPadding = PaddingValues(bottom = 40.dp),
             modifier = Modifier.navigationBarsPadding()
         ) {
-            item {
+            item(key = "header") {
                 BookmarksHeader(
                     totalCount = totalCount,
                     onBackClick = onBackClick
@@ -82,7 +82,10 @@ fun BookmarksScreen(
                     Color(0xFFE53935)
                 }
 
-                itemsIndexed(bookmarkedChapter.tips) { index, tip ->
+                itemsIndexed(
+                    bookmarkedChapter.tips,
+                    key = { _, tip -> "${bookmarkedChapter.id}_${tip.id}" }
+                ) { index, tip ->
                     TipCard(
                         tip = tip,
                         accent = accent,
